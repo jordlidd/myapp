@@ -11,14 +11,15 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  def update
-    @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
-      # Handle a successful update.
-    else
-      render 'edit'
-    end
-  end
+	def update
+	    @user = User.find(params[:id])
+	    if @user.update_attributes(user_params)
+	      flash[:success] = "Profile updated"
+	      redirect_to @user
+	    else
+	      render 'edit'
+	    end
+	  end
   
   def create
     @user = User.new(user_params)
@@ -36,4 +37,8 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
     end
+		
+		def signed_in_user
+		   redirect_to signin_url, notice: "Please sign in." unless signed_in?
+	  end
 end
